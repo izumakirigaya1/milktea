@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frozy Milk Tea</title>
+    <link rel="stylesheet" href="style/style.css">
+    <style>
+     body{
+      background-image: url("photos/background.png");
+     }
+    </style>
+</head>
+<body>
+  <header>
+    <h1>Frozy Milk Tea</h1>
+  </header>
+  <div class="container" id="products">
+    <div class="Thai">
+      <img src="photos/1.png" alt="no image" width="75" height="100"><br>
+      <button><a href="Thai.html">Information</a></button>
+      <p>Price: S-99 M-120 L-150</p>
+      <button onclick="order('Thai', 'Small', 99)">Small</button>
+      <button onclick="order('Thai', 'Medium', 120)">Medium</button>
+      <button onclick="order('Thai', 'Large', 150)">Large</button>
+    </div>
+    <div class="Black">
+        <img src="photos/2.png" alt="no image" width="75" height="100"><br>
+        <button><a href="Black.html">Information</a></button>
+        <p>Price: S-99 M-120 L-150</p>
+        <button onclick="order('Black', 'Small', 99)">Small</button>
+        <button onclick="order('Black', 'Medium', 120)">Medium</button>
+        <button onclick="order('Black', 'Large', 150)">Large</button>
+      </div>
+      <div class="Almond">
+        <img src="photos/3.png" alt="no image" width="75" height="100"><br>
+        <button><a href="Almond.html">Information</a></button>
+        <p>Price: S-99 M-120 L-150</p>
+        <button onclick="order('Almond', 'Small', 99)">Small</button>
+        <button onclick="order('Almond', 'Medium', 120)">Medium</button>
+        <button onclick="order('Almond', 'Large', 150)">Large</button>
+      </div>
+      <div class="Matcha">
+        <img src="photos/4.png" alt="no image" width="75" height="100"><br>
+        <button><a href="Matcha.html">Information</a></button>
+        <p>Price: S-99 M-120 L-150</p>
+        <button onclick="order('Matcha', 'Small', 99)">Small</button>
+        <button onclick="order('Matcha', 'Medium', 120)">Medium</button>
+        <button onclick="order('Matcha', 'Large', 150)">Large</button>
+      </div>
+      <div class="Taro">
+        <img src="photos/5.png" alt="no image" width="75" height="100"><br>
+        <button><a href="Taro.html">Information</a></button>
+        <p>Price: S-99 M-120 L-150</p>
+        <button onclick="order('Taro', 'Small', 99)">Small</button>
+        <button onclick="order('Taro', 'Medium', 120)">Medium</button>
+        <button onclick="order('Taro', 'Large', 150)">Large</button>
+      </div>
+      <div class="Honeydew">
+        <img src="photos/6.png" alt="no image" width="75" height="100"><br>
+        <button><a href="Honeydew.html">Information</a></button>
+        <p>Price: S-99 M-120 L-150</p>
+        <button onclick="order('Honeydew', 'Small', 99)">Small</button>
+        <button onclick="order('Honeydew', 'Medium', 120)">Medium</button>
+        <button onclick="order('Honeydew', 'Large', 150)">Large</button>
+      </div>
+    </div>
+    </div>
+  </div>
+
+  <div id="orderedQuantities"></div>
+
+  <script>
+
+    var orderedItems = {};
+
+  
+    function order(productType, size, price) {
+
+      var quantity = parseInt(prompt("Enter quantity for " + size + " " + productType + ":"));
+      if (!isNaN(quantity) && quantity > 0) {
+
+        if (orderedItems.hasOwnProperty(productType)) {
+          if (orderedItems[productType].hasOwnProperty(size)) {
+            orderedItems[productType][size] += quantity;
+          } else {
+            orderedItems[productType][size] = quantity;
+          }
+        } else {
+  
+          orderedItems[productType] = {};
+          orderedItems[productType][size] = quantity;
+        }
+    
+        updateOrderedQuantities();
+      } else {
+        alert("Please enter a valid quantity.");
+      }
+    }
+
+   
+    function updateOrderedQuantities() {
+      var output = "<h2>Ordered Items</h2>";
+      var totalCost = 0;
+
+      for (var product in orderedItems) {
+        output += "<p>" + product + ": ";
+        for (var size in orderedItems[product]) {
+          var itemQuantity = orderedItems[product][size];
+          var itemCost = itemQuantity * getItemPrice(product, size);
+          output += size + ": " + itemQuantity + " (PHP " + itemCost + ") ";
+  
+          output += "<button onclick='decreaseQuantity(\"" + product + "\", \"" + size + "\")'>-</button> ";
+          totalCost += itemCost;
+        }
+        output += "<br>";
+      }
+
+      output += "<h3>Total Cost: PHP " + totalCost + "</h3>";
+
+      document.getElementById("orderedQuantities").innerHTML = output;
+    }
+
+  
+    function getItemPrice(productType, size) {
+
+      var prices = {
+        'Thai': {
+          'Small': 99,
+          'Medium': 120,
+          'Large': 150
+        },
+        'Black': {
+          'Small': 99,
+          'Medium': 120,
+          'Large': 150
+        },
+        'Almond': {
+          'Small': 99,
+          'Medium': 120,
+          'Large': 150
+        },
+        'Matcha': {
+          'Small': 99,
+          'Medium': 120,
+          'Large': 150
+        },
+        'Taro': {
+          'Small': 99,
+          'Medium': 120,
+          'Large': 150
+        },
+        'Honeydew': {
+          'Small': 99,
+          'Medium': 120,
+          'Large': 150
+        }
+      };
+
+      return prices[productType][size];
+    }
+
+   
+    function decreaseQuantity(productType, size) {
+      if (orderedItems.hasOwnProperty(productType)) {
+        if (orderedItems[productType].hasOwnProperty(size)) {
+          if (orderedItems[productType][size] > 0) {
+            orderedItems[productType][size]--;
+            updateOrderedQuantities(); 
+          }
+        }
+      }
+    }
+  </script>
+</body>
+</html>
